@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="MissingConstraints">
+
+    <Button
+        android:id="@+id/btnToGray"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:text="转换为灰度图"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvOrigin"
+        android:layout_height="wrap_content"
+        android:text="原图"
+        android:layout_width="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintTop_toBottomOf="@+id/btnToGray" />
+
+    <ImageView
+        android:id="@+id/ivOrigin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/girl3"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toRightOf="@+id/tvOrigin"
+        app:layout_constraintTop_toBottomOf="@+id/btnToGray" />
+
+    <TextView
+        android:id="@+id/tvGray"
+        android:layout_width="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_height="wrap_content"
+        android:text="灰度图"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintTop_toBottomOf="@+id/ivOrigin" />
+
+    <ImageView
+        android:id="@+id/ivGray"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/girl3"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toRightOf="@+id/tvGray"
+        app:layout_constraintTop_toBottomOf="@+id/ivOrigin" />
+</androidx.constraintlayout.widget.ConstraintLayout>
