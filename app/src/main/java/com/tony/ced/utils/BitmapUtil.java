@@ -55,4 +55,17 @@ public class BitmapUtil {
         dst.release();
         return bitmap;
     }
+
+    public Bitmap getGrayBitmap(Bitmap bitmap) {
+        Mat src = new Mat();
+        Mat dst = new Mat();
+        //把bitmap转换为mat
+        Utils.bitmapToMat(bitmap, src);
+        Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGRA2GRAY);
+        Utils.matToBitmap(dst, bitmap);
+        //释放资源
+        src.release();
+        dst.release();
+        return bitmap;
+    }
 }

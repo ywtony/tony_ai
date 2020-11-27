@@ -3,6 +3,8 @@ package com.tony.ced;
 import android.app.Application;
 import android.content.Context;
 
+import com.tony.ced.utils.ContextUtils;
+
 /**
  * @ProjectName: tony_ai
  * @Package: com.tony.ced
@@ -26,5 +28,6 @@ public class CvApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        ContextUtils.init(this);
     }
 }

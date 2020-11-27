@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.tony.ced">
-
+    <!--    /储存卡的读写权限-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--    //调用相机权限-->
+    <uses-permission android:name="android.permission.CAMERA" />
     <application
         android:name=".CvApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="@string/appName"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -17,7 +22,61 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--        测试灰度图片-->
         <activity android:name=".ui.GrayImageActivity" />
+        <!--        测试Bitmap和Mat-->
+        <activity android:name=".ui.MapAndBitmapActivity" />
+        <!--        //图片选择Activity-->
+        <activity
+            android:name="com.donkingliang.imageselector.ImageSelectorActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <!--        //去掉Activity的ActionBar。-->
+        <!--        //使用者可以根据自己的项目去配置，不一定要这样写，只要让Activity的ActionBar去掉就可以了。-->
+        <!--        android:theme="@style/Theme.AppCompat.Light.NoActionBar"-->
+        <!--        //横竖屏切换处理。-->
+        <!--        //如果要支持横竖屏切换，一定要加上这句，否则在切换横竖屏的时候会发生异常。-->
+
+
+        <!--        //图片预览Activity-->
+        <activity
+            android:name="com.donkingliang.imageselector.PreviewActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <!--        //图片剪切Activity-->
+        <activity
+            android:name="com.donkingliang.imageselector.ClipImageActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".BaseActivity" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+        <meta-data
+            android:name="android.support.VERSION"
+            android:value="25.3.4"
+            tools:replace="android:value" />
+        <meta-data
+            android:name="design_width_in_dp"
+            android:value="375" />
+        <meta-data
+            android:name="design_height_in_dp"
+            android:value="667" />
+        <meta-data
+            android:name="design_width"
+            android:value="750" />
+        <meta-data
+            android:name="design_height"
+            android:value="1334" />
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.2" />
     </application>
 
 </manifest>
