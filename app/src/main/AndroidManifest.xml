@@ -22,10 +22,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--绘制Mat基本几何形状-->
+        <activity android:name=".ui.MatOptionActivity"/>
         <!--        测试灰度图片-->
         <activity android:name=".ui.GrayImageActivity" />
         <!--        测试Bitmap和Mat-->
         <activity android:name=".ui.MapAndBitmapActivity" />
+        <!-- 操作像素-->
+        <activity android:name=".ui.BitmapOptionActivity" />
+        <!-- 操作Mat-->
+        <activity android:name=".ui.MatPixelOptionActivity" />
         <!--        //图片选择Activity-->
         <activity
             android:name="com.donkingliang.imageselector.ImageSelectorActivity"
@@ -58,6 +64,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
         <meta-data
             android:name="android.support.VERSION"
             android:value="25.3.4"

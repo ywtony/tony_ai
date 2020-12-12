@@ -3,17 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
-    <Button
-        android:id="@+id/btnClickMenu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="点击弹出菜单" />
     <Button
         android:id="@+id/btnLoadImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="加载测试图片" />
+    <Button
+        android:id="@+id/btnClickMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="点击弹出菜单" />
 
     <ImageView
         android:id="@+id/ivOrigin"

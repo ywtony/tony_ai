@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="MissingConstraints">
+
+    <Button
+        android:id="@+id/btnRedAndWritePixelSingle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="一次读写一个像素" />
+
+
+    <Button
+        android:id="@+id/btnRedAndWritePixelAll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="一次读写所有像素"
+        app:layout_constraintLeft_toRightOf="@+id/btnRedAndWritePixelSingle" />
+    <Button
+        android:id="@+id/btnCropImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="裁剪BitmapImage"
+        app:layout_constraintLeft_toRightOf="@+id/btnRedAndWritePixelAll" />
+
+    <ImageView
+        android:id="@+id/ivShowImage"
+        android:layout_width="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/btnRedAndWritePixelSingle"
+        android:layout_marginTop="20dp"
+        android:src="@mipmap/ic_launcher"
+        android:visibility="gone"
+        android:layout_height="wrap_content" />
+</androidx.constraintlayout.widget.ConstraintLayout>

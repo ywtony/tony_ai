@@ -14,8 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.tony.ced.adapter.MainAdapter;
 import com.tony.ced.adapter.listener.OnListItemClickListener;
 import com.tony.ced.bean.MainItem;
+import com.tony.ced.ui.BitmapOptionActivity;
 import com.tony.ced.ui.GrayImageActivity;
 import com.tony.ced.ui.MapAndBitmapActivity;
+import com.tony.ced.ui.MatOptionActivity;
+import com.tony.ced.ui.MatPixelOptionActivity;
 import com.tony.ced.utils.ActivityUtils;
 import com.tony.ced.utils.ToastUtil;
 import com.tony.ced.weight.ScrollSpeedLinearLayoutManger;
@@ -84,6 +87,11 @@ public class MainActivity extends BaseActivity {
     private void initData() {
         datas.add(new MainItem("将任意图像转换为灰度图像", GrayImageActivity.class.getName()));
         datas.add(new MainItem("Bitmap和Mat", MapAndBitmapActivity.class.getName()));
+        datas.add(new MainItem("操作像素", BitmapOptionActivity.class.getName()));
+        datas.add(new MainItem("控制Mat绘制基本的几何形状", MatOptionActivity.class.getName()));
+        datas.add(new MainItem("操作Mat像素", MatPixelOptionActivity.class.getName()));
+
+
     }
 
     /**
@@ -106,7 +114,6 @@ public class MainActivity extends BaseActivity {
             ToastUtil.show("初始化失败");
         }
     }
-
 
 
 }
