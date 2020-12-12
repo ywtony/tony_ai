@@ -12,8 +12,10 @@ import com.tony.ced.BaseActivity;
 import com.tony.ced.R;
 
 import org.opencv.android.Utils;
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,26 +59,41 @@ public class MatPixelOptionActivity extends BaseActivity {
         datas.add("操作单个像素，并将图像像素取反");
         datas.add("一次操作一列像素，并增加图片亮度");
         datas.add("一次操作所有像素，并减小图像亮度");
+        datas.add("图像通道分离与合并");
+        datas.add("显示通道一的数据");
+        datas.add("显示通道二的数据");
+        datas.add("显示通道三的数据");
         show(datas);
     }
 
     @Override
     public void onMenuItemClick(int position) {
-       switch (position){
-           case 0:
-               optionSinglePixel();
-               break;
-           case 1:
-               optionRowPixels();
-               break;
-           case 2:
-               optionAllPixels();
-               break;
-           case 3:
-               break;
-       }
+        switch (position) {
+            case 0:
+                optionSinglePixel();
+                break;
+            case 1:
+                optionRowPixels();
+                break;
+            case 2:
+                optionAllPixels();
+                break;
+            case 3:
+                splitMerge();
+                break;
+            case 4:
+                showSingleChannels(0);
+                break;
+            case 5:
+                showSingleChannels(1);
+                break;
+            case 6:
+                showSingleChannels(2);
+                break;
+        }
 
     }
+
     /**
      * @description 一次更改一个像素，并对像素取反
      * @date: 2020/12/12 10:09
@@ -151,11 +168,12 @@ public class MatPixelOptionActivity extends BaseActivity {
         Utils.matToBitmap(target, bitmap);
         ivImage.setImageBitmap(bitmap);
     }
-     /**
-      * @description 一次性更改所有像素，并调节图像亮度（减小亮度）
-      * @date: 2020/12/12 10:09
-      * @author: wei.yang
-      */
+
+    /**
+     * @description 一次性更改所有像素，并调节图像亮度（减小亮度）
+     * @date: 2020/12/12 10:09
+     * @author: wei.yang
+     */
     private void optionAllPixels() {
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.girl5);
         Mat target = new Mat();
@@ -179,10 +197,53 @@ public class MatPixelOptionActivity extends BaseActivity {
         Utils.matToBitmap(target, bitmap);
         ivImage.setImageBitmap(bitmap);
     }
+
+    /**
+     * @description 图像通道分离与合并，并减少图像的亮度
+     * @date: 2020/12/12 10:20
+     * @author: wei.yang
+     */
+    private void splitMerge() {
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.girl5);
+        Mat target = new Mat();
+        Utils.bitmapToMat(bitmap, target);
+        List<Mat> mats = new ArrayList<>();
+        Core.split(target, mats);
+        for (Mat mat : mats) {
+            int pv = 0;
+            int channels = mat.channels();
+            int width = mat.width();
+            int height = mat.height();
+            byte[] data = new byte[channels * width * height];
+            mat.get(0, 0, data);
+            for (int i = 0; i < data.length; i++) {
+                pv = data[i] & 0xff;
+                pv = pv - 100;
+                if (pv < 0) {
+                    pv = 0;
+                }
+                data[i] = (byte) pv;
+
+            }
+            mat.put(0, 0, data);
+        }
+        Core.merge(mats, target);
+
+        Utils.matToBitmap(mats.get(1), bitmap);
+        ivImage.setImageBitmap(bitmap);
+    }
      /**
-      * @description 图像通道分离
-      * @date: 2020/12/12 10:20
+      * @description 取单独的一个通道的图像数据并显示出来
+      * @date: 2020/12/12 10:36
       * @author: wei.yang
       */
-
+    private void showSingleChannels(int index){
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.girl5);
+        Mat target = new Mat();
+        Utils.bitmapToMat(bitmap, target);
+        List<Mat> mats = new ArrayList<>();
+        Core.split(target, mats);
+        Utils.matToBitmap(mats.get(index), bitmap);
+        ivImage.setImageBitmap(bitmap);
+    }
 }
