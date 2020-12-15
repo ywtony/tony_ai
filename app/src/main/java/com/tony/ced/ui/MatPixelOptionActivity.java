@@ -15,12 +15,16 @@ import com.tony.ced.R;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfDouble;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,6 +72,18 @@ public class MatPixelOptionActivity extends BaseActivity {
         datas.add("显示通道二的数据");
         datas.add("显示通道三的数据");
         datas.add("均值与标准方差");
+        datas.add("对两个图片执行叠加操作——加法");
+        datas.add("对两个图片执行叠加操作——减法");
+        datas.add("对两个图片执行叠加操作——乘法");
+        datas.add("对两个图片执行叠加操作——除法");
+        datas.add("调整图像亮度");
+        datas.add("调整图像对比度");
+        datas.add("基于权重的图像混合");
+        datas.add("图像取反操作");
+        datas.add("图像的与操作");
+        datas.add("图像或操作");
+        datas.add("异或操作");
+        datas.add("浮点型图像归一化处理");
         show(datas);
     }
 
@@ -97,6 +113,42 @@ public class MatPixelOptionActivity extends BaseActivity {
                 break;
             case 7:
                 optionMeanStd();
+                break;
+            case 8:
+                addMat();
+                break;
+            case 9:
+                subtractMat();
+                break;
+            case 10:
+                multiplyMat();//可能是参数配置有误，变空白页了
+                break;
+            case 11:
+                divideMat();//可能是参数配置有误，变空白页了
+                break;
+            case 12://调节亮度
+                brightness();
+                break;
+            case 13://调节对比度
+                contrastRatio();
+                break;
+            case 14://基于权重的图像混合
+                addWidget();
+                break;
+            case 15://图像取反操作
+                bitwiseNot();
+                break;
+            case 16://图像与操作
+                bitwiseAnd();
+                break;
+            case 17://图像的或操作
+                bitwiseOr();
+                break;
+            case 18://异或操作
+                bitwiseXOr();
+                break;
+            case 19://浮点型图像归一化处理
+                normalize();
                 break;
         }
 
@@ -298,11 +350,250 @@ public class MatPixelOptionActivity extends BaseActivity {
                 data[i] = (byte) 0;
             }
         }
-        grayMat.put(0,0,data);
+        grayMat.put(0, 0, data);
 
 
         Utils.matToBitmap(grayMat, bitmap);
         ivImage.setImageBitmap(bitmap);
 
+    }
+
+    /**
+     * @description 基于图像的加法运算
+     * @date: 2020/12/12 11:13
+     * @author: wei.yang
+     */
+    private void addMat() {
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.girl5);
+        Mat target = new Mat();
+        Utils.bitmapToMat(bitmap, target);
+        //输入图像二
+        Mat moon = Mat.zeros(target.rows(), target.cols(), target.type());
+        int cx = target.cols() - 700;
+        int cy = 150;
+        Imgproc.circle(moon, new Point(cx, cy), 120, new Scalar(90, 95, 234), -1, 8, 0);
+        //执行加法运算
+        Mat dst = new Mat();
+        Core.add(target, moon, dst);
+
+        Utils.matToBitmap(dst, bitmap);
+        ivImage.setImageBitmap(bitmap);
+
+    }
+
+    /**
+     * @description 基于图像的减法运算
+     * @date: 2020/12/12 11:13
+     * @author: wei.yang
+     */
+    private void subtractMat() {
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.girl5);
+        Mat target = new Mat();
+        Utils.bitmapToMat(bitmap, target);
+        //输入图像二
+        Mat moon = Mat.zeros(target.rows(), target.cols(), target.type());
+        int cx = target.cols() - 700;
+        int cy = 150;
+        Imgproc.circle(moon, new Point(cx, cy), 120, new Scalar(90, 95, 234), -1, 8, 0);
+        //执行加法运算
+        Mat dst = new Mat();
+        Core.subtract(target, moon, dst);
+
+        Utils.matToBitmap(dst, bitmap);
+        ivImage.setImageBitmap(bitmap);
+
+    }
+
+    /**
+     * @description 乘法
+     * @date: 2020/12/12 11:13
+     * @author: wei.yang
+     */
+    private void multiplyMat() {
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.girl5);
+        Mat target = new Mat();
+        Utils.bitmapToMat(bitmap, target);
+        //输入图像二
+        Mat moon = Mat.zeros(target.rows(), target.cols(), target.type());
+        int cx = target.cols() - 700;
+        int cy = 150;
+        Imgproc.circle(moon, new Point(cx, cy), 120, new Scalar(90, 95, 234), -1, 8, 0);
+        //执行加法运算
+        Mat dst = new Mat();
+        Core.multiply(target, moon, dst);
+
+        Utils.matToBitmap(dst, bitmap);
+        ivImage.setImageBitmap(bitmap);
+
+    }
+
+    /**
+     * @description 除法
+     * @date: 2020/12/12 11:13
+     * @author: wei.yang
+     */
+    private void divideMat() {
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.girl5);
+        Mat target = new Mat();
+        Utils.bitmapToMat(bitmap, target);
+        //输入图像二
+        Mat moon = Mat.zeros(target.rows(), target.cols(), target.type());
+        int cx = target.cols() - 700;
+        int cy = 150;
+        Imgproc.circle(moon, new Point(cx, cy), 120, new Scalar(90, 95, 234), -1, 8, 0);
+        //执行加法运算
+        Mat dst = new Mat();
+        Core.divide(target, moon, dst);
+
+        Utils.matToBitmap(dst, bitmap);
+        ivImage.setImageBitmap(bitmap);
+    }
+
+    /**
+     * @description 调整图像的亮度：图像的亮度和对比度是图像的两个基本属性，对RGB色彩图片来说，亮度越高图像对应的像素点的RGB值应该越大，越接近255，反之越小，越接近0.所以可以通过简单
+     * 的加法或者减法来起到调节图像亮度的目的。
+     * @date: 2020/12/12 11:30
+     * @author: wei.yang
+     */
+    private void brightness() {
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.girl5);
+        Mat target = new Mat();
+        Utils.bitmapToMat(bitmap, target);
+        Mat dst = new Mat();
+        Core.add(target, new Scalar(50, 50, 50), dst);
+
+        Utils.matToBitmap(dst, bitmap);
+        ivImage.setImageBitmap(bitmap);
+
+    }
+
+    /**
+     * @description 调整图像的对比度，图像的对比度是图像的基本属性之一。其主要用来描述图像颜色与亮度之间的差异感知，对比度越大，图像每个像素与周围的差异性也就越大，整个图像的细节也就
+     * 越显著，反之亦然。通过对图像进行乘法或者除法操作来扩大或者缩小图像像素之间的差值，这样达到了调节图像对比度的目的。
+     * @date: 2020/12/12 11:33
+     * @author: wei.yang
+     */
+    private void contrastRatio() {
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.girl5);
+        Mat target = new Mat();
+        Utils.bitmapToMat(bitmap, target);
+        Mat dst = new Mat();
+        Core.multiply(target, new Scalar(1.5, 1.5, 1.5), dst);
+
+
+        //转换为Bitmap显示
+        Bitmap bm = Bitmap.createBitmap(target.cols(),target.rows(), Bitmap.Config.ARGB_8888);
+        Mat result =new Mat();
+        Imgproc.cvtColor(dst,result,Imgproc.COLOR_BGR2RGBA);
+        Utils.matToBitmap(result, bm);
+        ivImage.setImageBitmap(bm);
+    }
+     /**
+      * @description 基于权重的图像调节方法
+      * @date: 2020/12/15 9:15
+      * @author: wei.yang
+      */
+    private void addWidget(){
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.girl5);
+        Mat target = new Mat();
+        Utils.bitmapToMat(bitmap, target);
+        Mat dst = new Mat();
+        //创建一个纯黑色的图片
+        Mat blackMat=Mat.zeros(target.size(),target.type());
+        //像素混合-基于权重
+        Core.addWeighted(target,1.5,blackMat,-0.5,30,dst);
+        //转换为Bitmap显示
+        Bitmap bm = Bitmap.createBitmap(target.cols(),target.rows(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(dst, bm);
+        ivImage.setImageBitmap(bm);
+    }
+
+    /**
+     * 图像取反操作
+     */
+    private void bitwiseNot(){
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.girl5);
+        Mat target = new Mat();
+        Utils.bitmapToMat(bitmap, target);
+        Mat dst = new Mat();
+        Core.bitwise_not(target,dst);
+        //转换为Bitmap显示
+        Bitmap bm = Bitmap.createBitmap(target.cols(),target.rows(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(dst, bm);
+        ivImage.setImageBitmap(bm);
+    }
+
+    /**
+     * 图像的与操作：操作两张图像让其混合，输出图像有降低混合图像亮度的效果
+     */
+    private void bitwiseAnd(){
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.girl5);
+        Mat target = new Mat();
+        Utils.bitmapToMat(bitmap, target);
+        Mat target2 = Mat.zeros(target.size(),target.type());
+        target2.setTo(new Scalar(255,255,255));
+        Mat dst = new Mat();
+        Core.bitwise_and(target,target2,dst);
+        //转换为Bitmap显示
+        Bitmap bm = Bitmap.createBitmap(target.cols(),target.rows(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(dst, bm);
+        ivImage.setImageBitmap(bm);
+    }
+
+    /**
+     * 或操作，对两张混合后的输出图像， 有强化混合图像亮度的效果
+     */
+    private void bitwiseOr(){
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.girl5);
+        Mat target = new Mat();
+        Utils.bitmapToMat(bitmap, target);
+        Mat target2 = Mat.zeros(target.size(),target.type());
+        target2.setTo(new Scalar(255,255,255));
+        Mat dst = new Mat();
+        Core.bitwise_or(target,target2,dst);
+        //转换为Bitmap显示
+        Bitmap bm = Bitmap.createBitmap(target.cols(),target.rows(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(dst, bm);
+        ivImage.setImageBitmap(bm);
+    }
+    /**
+     * 异或操作，可以看做是对输入图像的叠加取反效果
+     */
+    private void bitwiseXOr(){
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.girl5);
+        Mat target = new Mat();
+        Utils.bitmapToMat(bitmap, target);
+        Mat target2 = Mat.zeros(target.size(),target.type());
+        target2.setTo(new Scalar(255,255,255));
+        Mat dst = new Mat();
+        Core.bitwise_xor(target,target2,dst);
+        //转换为Bitmap显示
+        Bitmap bm = Bitmap.createBitmap(target.cols(),target.rows(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(dst, bm);
+        ivImage.setImageBitmap(bm);
+    }
+
+    /**
+     * 将0~1的浮点数归一化处理到0~255的图像并输出
+     */
+    private void normalize(){
+        Mat src = Mat.zeros(400,400, CvType.CV_32FC3);
+        float[] data = new float[400*400*3];
+        Random random = new Random();
+        for(int i=0;i<data.length;i++){
+            data[i] = (float)random.nextGaussian();
+        }
+        src.put(0,0,data);
+        //将其值归一化到0~255之间
+        Mat dst = new Mat();
+        Mat newMat = new Mat();
+        Core.normalize(src,dst,0,255,Core.NORM_MINMAX,-1,newMat);
+        //类型转换
+        Mat dst8u = new Mat();
+        dst.convertTo(dst8u,CvType.CV_8UC3);
+
+        Bitmap bitmap = Bitmap.createBitmap(dst8u.cols(),dst8u.rows(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(dst8u,bitmap);
+        ivImage.setImageBitmap(bitmap);
     }
 }

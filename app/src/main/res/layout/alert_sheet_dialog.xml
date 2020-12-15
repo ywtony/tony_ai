@@ -13,14 +13,19 @@
         android:background="@color/rect"
         app:rounded_radius="10dp">
 
-        <LinearLayout
-            android:id="@+id/items"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:divider="@drawable/person_detail_border_bottom"
-            android:showDividers="middle" />
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/items"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@drawable/person_detail_border_bottom"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:showDividers="middle" />
+        </ScrollView>
     </com.tony.ced.weight.RoundedLayout>
 
 </LinearLayout>
