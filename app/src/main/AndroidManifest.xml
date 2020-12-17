@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <!--绘制Mat基本几何形状-->
-        <activity android:name=".ui.MatOptionActivity"/>
+        <activity android:name=".ui.MatOptionActivity" />
         <!--        测试灰度图片-->
         <activity android:name=".ui.GrayImageActivity" />
         <!--        测试Bitmap和Mat-->
@@ -32,6 +32,8 @@
         <activity android:name=".ui.BitmapOptionActivity" />
         <!-- 操作Mat-->
         <activity android:name=".ui.MatPixelOptionActivity" />
+        <!--图像操作-->
+        <activity android:name=".ui.ImageOptionActivity" />
         <!--        //图片选择Activity-->
         <activity
             android:name="com.donkingliang.imageselector.ImageSelectorActivity"

@@ -16,6 +16,7 @@ import com.tony.ced.adapter.listener.OnListItemClickListener;
 import com.tony.ced.bean.MainItem;
 import com.tony.ced.ui.BitmapOptionActivity;
 import com.tony.ced.ui.GrayImageActivity;
+import com.tony.ced.ui.ImageOptionActivity;
 import com.tony.ced.ui.MapAndBitmapActivity;
 import com.tony.ced.ui.MatOptionActivity;
 import com.tony.ced.ui.MatPixelOptionActivity;
@@ -90,8 +91,7 @@ public class MainActivity extends BaseActivity {
         datas.add(new MainItem("操作像素", BitmapOptionActivity.class.getName()));
         datas.add(new MainItem("控制Mat绘制基本的几何形状", MatOptionActivity.class.getName()));
         datas.add(new MainItem("操作Mat像素", MatPixelOptionActivity.class.getName()));
-
-
+        datas.add(new MainItem("操作Mat像素", ImageOptionActivity.class.getName()));
     }
 
     /**
