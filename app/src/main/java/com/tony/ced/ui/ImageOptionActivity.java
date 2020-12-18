@@ -62,6 +62,8 @@ public class ImageOptionActivity extends BaseActivity {
         datas.add("均值模糊");
         datas.add("高斯模糊");
         datas.add("中值滤波");
+        datas.add("最大值滤波");
+        datas.add("最小值滤波");
         show(datas);
     }
 
@@ -77,6 +79,12 @@ public class ImageOptionActivity extends BaseActivity {
                 break;
             case 2://中值滤波
                 toMedianBlur();
+                break;
+            case 3://最大值滤波
+                toDilateBlur();
+                break;
+            case 4://最小值滤波
+                toErodeBlur();
                 break;
         }
     }
@@ -142,8 +150,8 @@ public class ImageOptionActivity extends BaseActivity {
      * src：表示输入图像，当ksize为3、5的时候输入图像可以为浮点数或者整数，当ksize大于5时只能为字节类型，及CV_8UC
      * dst:表示中值滤波后的输出图像，其类型与输入图像保持一致。
      * ksize:表示模块大小，常见的是3、5，模板大小必须为奇数，而且必须大于1
-     *
-     *
+     * <p>
+     * <p>
      * 特点：中值滤波对图像的椒盐噪声有很好的抑制作用，是一个很好的图像降噪滤波器
      * 椒盐噪声：图片中随机出现的白点或者黑点
      */
@@ -153,6 +161,57 @@ public class ImageOptionActivity extends BaseActivity {
         Utils.bitmapToMat(bitmap, target);
         Mat dst = new Mat();
         Imgproc.medianBlur(target, dst, 5);
+        Utils.matToBitmap(dst, bitmap);
+        ivImage.setImageBitmap(bitmap);
+        target.release();
+        dst.release();
+    }
+
+    /**
+     * 最大值与最小值滤波：其和中值滤波非常相似，唯一不同的一点是对于排序后的像素数组，中值滤波使用中间值代替中心像素点输出。而最大值和最小值滤波采用最大值或者最小值代替中心点像素输出。
+     */
+    /**
+     * @description 最大值滤波
+     * @date: 2020/12/18 9:31
+     * @author: wei.yang
+     * dilate(Mat src,Mat dst,Mat kernel)//膨胀（最大值滤波）用最大值替换中心像素
+     * src：输入图像
+     * dst：输出图像
+     * kernel：表示结构元素或卷积核，它可以是任意形状
+     */
+    private void toDilateBlur() {
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.girl5);
+        Mat target = new Mat();
+        Utils.bitmapToMat(bitmap, target);
+        Mat dst = new Mat();
+        //创建一个大小为3的矩形
+        Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(3, 3));
+        //膨胀操作
+        Imgproc.dilate(target, dst, kernel);
+        Utils.matToBitmap(dst, bitmap);
+        ivImage.setImageBitmap(bitmap);
+        target.release();
+        dst.release();
+    }
+
+    /**
+     * @description 最小值滤波
+     * @date: 2020/12/18 9:32
+     * @author: wei.yang
+     * erode(Mat src,Mat dst,Mat kernel)//腐蚀（最小值滤波）用最小值替换中心像素
+     * src：输入图像
+     * dst：输出图像
+     * kernel：表示结构元素或卷积核，它可以是任意形状
+     */
+    private void toErodeBlur() {
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.girl5);
+        Mat target = new Mat();
+        Utils.bitmapToMat(bitmap, target);
+        Mat dst = new Mat();
+        //创建一个3x3的矩形结构体
+        Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(3, 3));
+        //腐蚀操作
+        Imgproc.erode(target, dst, kernel);
         Utils.matToBitmap(dst, bitmap);
         ivImage.setImageBitmap(bitmap);
         target.release();
