@@ -64,6 +64,7 @@ public class ImageOptionActivity extends BaseActivity {
         datas.add("中值滤波");
         datas.add("最大值滤波");
         datas.add("最小值滤波");
+        datas.add("高斯双边滤波");
         show(datas);
     }
 
@@ -85,6 +86,9 @@ public class ImageOptionActivity extends BaseActivity {
                 break;
             case 4://最小值滤波
                 toErodeBlur();
+                break;
+            case 5://高斯双边滤波
+                toBilateralFilter();
                 break;
         }
     }
@@ -216,5 +220,44 @@ public class ImageOptionActivity extends BaseActivity {
         ivImage.setImageBitmap(bitmap);
         target.release();
         dst.release();
+    }
+
+    /**
+     * 高斯双边滤波、金字塔均值迁移滤波：拥有人脸美化及图片美化效果
+     */
+     /**
+      * @description 高斯双边滤波：高斯双边滤波是在高斯滤波的基础上进一步拓展与延伸出来的图像滤波方法，blur是图像均值模糊，会导致图像轮廓与边缘消失的现象，而高斯模糊会产生类似毛玻璃的效果
+      * 导致边缘扩展效应明显，图像边缘细节丢失现象。双边滤波器可以很好的保留边缘的同时抑制平坦区域图像的噪声。
+      * 双边滤波器能做到这些的原因在于它不想普通的高斯/卷积滤波，其不仅考虑了位置对中心像素的影响，还考虑了卷积核中像素与中心店像素之间相似程度的影响。
+      * @date: 2020/12/18 11:12
+      * @author: wei.yang
+      *
+      * bilateral(Mat src,Mat dst,int d,double sigmaColor,double sigmaSpace)
+      * src:输入图像
+      * dst:高斯双边滤波后的输出图像
+      * d:表示过滤的卷积核直径大小,一般取0意思是从sigmaColor中计算得到
+      * sigmaColor:颜色权重计算时需要的参数
+      * sigmaSpace:控件权重计算时需要的参数
+      *
+      * 通常情况下：sigmaColor的取值范围再100~150左右，sigmaSpace的取值范围再10~25之间的时候，双边滤波的效果比较好，计算速度也比较快
+      *
+      */
+    private void toBilateralFilter(){
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.girl5);
+
+        Mat target = new Mat();
+        Utils.bitmapToMat(bitmap, target);
+        Mat dst = new Mat();
+        //这行代码必须要加上，Bitmap默认的颜色通道时RGBA，需要转换为OpenCv可以识别的BGR。不然就会报通道数异常
+        Imgproc.cvtColor(target,dst,Imgproc.COLOR_RGBA2BGR);
+
+        Mat dst2 = new Mat();
+        //高斯双边滤波，用于给图片美化
+        Imgproc.bilateralFilter(dst, dst2, 0,150d,15d);
+        Utils.matToBitmap(dst2, bitmap);
+        ivImage.setImageBitmap(bitmap);
+        target.release();
+        dst.release();
+        dst2.release();
     }
 }
