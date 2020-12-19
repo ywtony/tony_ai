@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.tony.ced.adapter.MainAdapter;
 import com.tony.ced.adapter.listener.OnListItemClickListener;
 import com.tony.ced.bean.MainItem;
+import com.tony.ced.ui.BaseFeaturesTestingActivity;
 import com.tony.ced.ui.BitmapOptionActivity;
 import com.tony.ced.ui.GrayImageActivity;
 import com.tony.ced.ui.ImageOptionActivity;
@@ -92,6 +93,7 @@ public class MainActivity extends BaseActivity {
         datas.add(new MainItem("控制Mat绘制基本的几何形状", MatOptionActivity.class.getName()));
         datas.add(new MainItem("操作Mat像素", MatPixelOptionActivity.class.getName()));
         datas.add(new MainItem("操作Mat像素", ImageOptionActivity.class.getName()));
+        datas.add(new MainItem("图像基本特征检测", BaseFeaturesTestingActivity.class.getName()));
     }
 
     /**
