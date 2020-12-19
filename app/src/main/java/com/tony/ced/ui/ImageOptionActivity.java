@@ -67,6 +67,20 @@ public class ImageOptionActivity extends BaseActivity {
         datas.add("最小值滤波");
         datas.add("高斯双边滤波");
         datas.add("金字塔均值迁移滤波");
+        datas.add("自定义均值模糊卷积核");
+        datas.add("自定义近似高斯模糊卷积核");
+        datas.add("自定义锐化算子");
+        datas.add("自定义x方向梯度算子");
+        datas.add("自定义y方向的梯度算子");
+        datas.add("膨胀");
+        datas.add("腐蚀");
+        datas.add("开操作");
+        datas.add("闭操作");
+        datas.add("黑帽");
+        datas.add("顶帽");
+        datas.add("形态学梯度");
+        datas.add("自定义阈值分割");
+        datas.add("自适应阈值分割");
         show(datas);
     }
 
@@ -92,8 +106,50 @@ public class ImageOptionActivity extends BaseActivity {
             case 5://高斯双边滤波
                 toBilateralFilter();
                 break;
-            case 6:
+            case 6://金字塔均值迁移滤波
                 toPyrMeanShiftFiltering();
+                break;
+            case 7://自定义均值模糊卷积核
+                toFilter2DBlur();
+                break;
+            case 8://自定义近似高斯模糊卷积核
+                toFilter2DMeansBlur();
+                break;
+            case 9://自定义锐化算子
+                toFilter2DRuiHua();
+                break;
+            case 10://自定义x方向梯度算子
+                toFilter2DRobert(0);
+                break;
+            case 11://自定义y方向梯度算子
+                toFilter2DRobert(1);
+                break;
+            case 12://膨胀
+                toMorphologyDemo(0);
+                break;
+            case 13://腐蚀
+                toMorphologyDemo(1);
+                break;
+            case 14://开操作
+                toMorphologyDemo(2);
+                break;
+            case 15://闭操作
+                toMorphologyDemo(3);
+                break;
+            case 16://黑帽
+                toMorphologyDemo(4);
+                break;
+            case 17://顶帽
+                toMorphologyDemo(5);
+                break;
+            case 18://形态学梯度
+                toMorphologyDemo(6);
+                break;
+            case 19://自定义阈值分割
+                toThresholdBinnary(0);
+                break;
+            case 20://自适应阈值分割
+                toAdaptiveThreshold(0);
                 break;
         }
     }
@@ -314,17 +370,14 @@ public class ImageOptionActivity extends BaseActivity {
      * dst:输出图像
      * ddepth:图像深度，-1表示与输入图像一致即可
      * kernel:表示自定义卷积核
-     *
      */
     private void toFilter2DBlur() {
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.girl5);
-
         Mat target = new Mat();
         Utils.bitmapToMat(bitmap, target);
         Mat dst = new Mat();
         //这行代码必须要加上，Bitmap默认的颜色通道时RGBA，需要转换为OpenCv可以识别的BGR。不然就会报通道数异常
         Imgproc.cvtColor(target, dst, Imgproc.COLOR_RGBA2BGR);
-
         Mat dst2 = new Mat();
         //自定义均值模糊卷积核
         Mat k = new Mat(3, 3, CvType.CV_32FC1);
@@ -333,13 +386,325 @@ public class ImageOptionActivity extends BaseActivity {
                 1.0f / 9.0f, 1.0f / 9.0f, 1.0f / 9.0f,
                 1.0f / 9.0f, 1.0f / 9.0f, 1.0f / 9.0f,
         };
-        k.put(0,0,data);
-        Imgproc.filter2D(dst,dst2,-1,k);
+        k.put(0, 0, data);
+        Imgproc.filter2D(dst, dst2, -1, k);
         Utils.matToBitmap(dst2, bitmap);
         ivImage.setImageBitmap(bitmap);
         target.release();
         dst.release();
         dst2.release();
+    }
+
+    /**
+     * @description 自定近似高斯模糊卷积核
+     * @date: 2020/12/19 10:47
+     * @author: wei.yang
+     */
+    private void toFilter2DMeansBlur() {
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.girl5);
+        Mat target = new Mat();
+        Utils.bitmapToMat(bitmap, target);
+        Mat dst = new Mat();
+        //这行代码必须要加上，Bitmap默认的颜色通道时RGBA，需要转换为OpenCv可以识别的BGR。不然就会报通道数异常
+        Imgproc.cvtColor(target, dst, Imgproc.COLOR_RGBA2BGR);
+        Mat dst2 = new Mat();
+        //自定义均值模糊卷积核
+        Mat k = new Mat(3, 3, CvType.CV_32FC1);
+        float[] data = new float[]{
+                0, 1.0f / 8.0f, 0,
+                1.0f / 8.0f, 0.5f, 1.0f / 8.0f,
+                0, 1.0f / 8.0f, 0,
+        };
+        k.put(0, 0, data);
+        Imgproc.filter2D(dst, dst2, -1, k);
+        Utils.matToBitmap(dst2, bitmap);
+        ivImage.setImageBitmap(bitmap);
+        target.release();
+        dst.release();
+        dst2.release();
+    }
+
+    /**
+     * 图像的锐化可以提高图像的对比度，轻微去模糊，提升图片质量
+     * 下面通过自定义实现锐化算子
+     */
+    private void toFilter2DRuiHua() {
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.girl5);
+        Mat target = new Mat();
+        Utils.bitmapToMat(bitmap, target);
+        Mat dst = new Mat();
+        //这行代码必须要加上，Bitmap默认的颜色通道时RGBA，需要转换为OpenCv可以识别的BGR。不然就会报通道数异常
+        Imgproc.cvtColor(target, dst, Imgproc.COLOR_RGBA2BGR);
+        Mat dst2 = new Mat();
+        //自定义均值模糊卷积核
+        Mat k = new Mat(3, 3, CvType.CV_32FC1);
+//        float[] data = new float[]{//锐化算子
+//                0, -1, 0,
+//                -1, 5, -1,
+//                0, -1, 0,
+//        };
+
+        //强化锐化算子八邻域
+        float[] data = new float[]{//锐化算子
+                -1, -1, -1,
+                -1, 9, -1,
+                -1, -1, -1,
+        };
+        k.put(0, 0, data);
+        Imgproc.filter2D(dst, dst2, -1, k);
+        Utils.matToBitmap(dst2, bitmap);
+        ivImage.setImageBitmap(bitmap);
+        target.release();
+        dst.release();
+        dst2.release();
+    }
+
+    /**
+     * 图像的边缘是图像像素变化比较大的区域，是图像特征表征的候选区之一，在图像特征提取，图像二值化等方面有很重的应用。
+     * 通过自定义算子实现梯度图像是查找边缘的关键步骤之一
+     */
+    private void toFilter2DRobert(int type) {
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.girl5);
+        Mat target = new Mat();
+        Utils.bitmapToMat(bitmap, target);
+        Mat dst = new Mat();
+        //这行代码必须要加上，Bitmap默认的颜色通道时RGBA，需要转换为OpenCv可以识别的BGR。不然就会报通道数异常
+        Imgproc.cvtColor(target, dst, Imgproc.COLOR_RGBA2BGR);
+        Mat dst2 = new Mat();
+        //x方向的梯度
+        Mat kx = new Mat(3, 3, CvType.CV_32FC1);
+        //y方向上的梯度
+        Mat ky = new Mat(3, 3, CvType.CV_32FC1);
+        //定义x方向上的梯度算子
+        float[] robertX = new float[]{-1, 0, 0, 1};
+        //定义y方向上的梯度算子
+        float[] robertY = new float[]{0, -1, 1, 0};
+        if (type == 0) {
+            Imgproc.filter2D(dst, dst2, -1, kx);
+        } else {
+            Imgproc.filter2D(dst, dst2, -1, ky);
+        }
+
+        Utils.matToBitmap(dst2, bitmap);
+        ivImage.setImageBitmap(bitmap);
+        target.release();
+        dst.release();
+        dst2.release();
+    }
+
+
+    /**以下是形态学操作相关的内容
+     *
+     * OpenCv的形态学操作主要有：膨胀、腐蚀、开操作、闭操作、黑帽、顶帽、形态学梯度
+     *
+     *
+     * ******/
+
+    /**
+     * 膨胀与腐蚀：膨胀与腐蚀是最基本的形态学操作，与卷积计算类似，其也需要一个类似卷积核的结构元素，与输入图像像素数据完成计算，腐蚀与膨胀常见的操作对象主要是二值图像
+     * 或者灰度图像。
+     * OpenCV中所有的形态学操作都可以扩展到彩色图像，而腐蚀与膨胀扩展到彩色图像，就像前面提到的最小值与最大值滤波
+     *
+     * 特点：图像噪声消除、分离出独立的图像形状与几何元素，断开或者连接相邻的元素。其中膨胀是使局部极大值替换中心点像素，腐蚀与它正好相反，是使用局部极小值替换中心像素，而
+     * 局部就是指结构元素，结构元素的形状与大小，关于最终的输出结果存在内在的对应关于与联系。
+     *
+     * 生成结构元素的API如下
+     * getStructuringElement(int shape,Size ksize,Point anchor)
+     * shape:表示结构元素的形状类型
+     * ksize：表示结构元素的大小
+     * achor：表示结构元素中心点的位置
+     *
+     * 其中结构元素支持的类型如下：MORPH_RECT：矩形。MORPH_CROSS :十字交叉。MORPH_ELLIPSE：椭圆或者圆形
+     *
+     */
+
+    /**
+     * 开闭操作：开闭操作是基于膨胀与腐蚀组合形成的新的形态学操作，开操作有点像腐蚀操作，主要用来去除小的图像噪声或者图像元素对象黏连。开操作可以定义为一个腐蚀操作再加上一个膨胀操作
+     * 两个操作采用相同的结构元素
+     *
+     * 闭操作：闭操作有点像膨胀操作，但是它与膨胀不同，它只会填充小的闭合区域，闭操作可以定义为一个膨胀操作再接一个腐蚀操作。
+     *
+     */
+
+
+    /**
+     * 顶帽与黑帽：是由形态学开闭操作之后的结果与原图运算得到的结果，用于在灰度图像或显微镜图像上分离比较暗或者明亮的斑点。顶帽操作表示的是输入图像与图像开操作之间的不同
+     * 黑帽操作：表示的是图像闭操作于输入图像之间的不同
+     *
+     */
+
+    /**
+     * 梯度：图像的形态学梯度又称为基本梯度，是通过两个最基本的额形态学操作膨胀与腐蚀之间的差值得到的。其中腐蚀与膨胀操作使用的结构元素必须相同。
+     */
+
+    private void toMorphologyDemo(int option) {
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.girl5);
+        Mat target = new Mat();
+        Utils.bitmapToMat(bitmap, target);
+        Mat dst = new Mat();
+        //这行代码必须要加上，Bitmap默认的颜色通道时RGBA，需要转换为OpenCv可以识别的BGR。不然就会报通道数异常
+        Imgproc.cvtColor(target, dst, Imgproc.COLOR_RGBA2BGR);
+        Mat dst2 = new Mat();
+        Mat k = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(15, 15), new Point(-1, -1));
+        switch (option) {
+            case 0://膨胀
+                Imgproc.morphologyEx(dst, dst2, Imgproc.MORPH_DILATE, k);
+                break;
+            case 1://腐蚀
+                Imgproc.morphologyEx(dst, dst2, Imgproc.MORPH_ERODE, k);
+                break;
+            case 2://开操作
+                Imgproc.morphologyEx(dst, dst2, Imgproc.MORPH_OPEN, k);
+                break;
+            case 3://闭操作
+                Imgproc.morphologyEx(dst, dst2, Imgproc.MORPH_CLOSE, k);
+                break;
+            case 4://黑帽
+                Imgproc.morphologyEx(dst,dst2,Imgproc.MORPH_BLACKHAT,k);
+                break;
+            case 5://顶帽
+                Imgproc.morphologyEx(dst, dst2, Imgproc.MORPH_TOPHAT, k);
+                break;
+            case 6://形态学梯度
+                Imgproc.morphologyEx(dst, dst2, Imgproc.MORPH_GRADIENT, k);
+                break;
+        }
+
+        Utils.matToBitmap(dst2, bitmap);
+        ivImage.setImageBitmap(bitmap);
+        target.release();
+        dst.release();
+        dst2.release();
+    }
+
+
+    /**
+     *对于彩色图像或者灰度图像，可以设置一个或多个阈值，使用他们可以对图像像素数据进行分类。这在图像处理上有一个专门的术语叫：图像分割。
+     *
+     * 阈值二值化：对于图像阈值二值化，是令大于阈值T的值为最大灰度255，小于阈值T的值为最小灰度0
+     *
+     * 反阈值二值化：若大于阈值T则赋值等于最小灰度0，如果小于阈值T则等于最大灰度值255
+     *
+     * 阈值截断：如果大于阈值T则赋值等于阈值T，若小于阈值T则保持原来的不变。
+     *
+     * 阈值取零：如果大于阈值T，则T保持不变。若小于阈值T，则则T的像素值等于0
+     *
+     * 反阈值取零：如果大于阈值T，则取0。如果小于阈值T则保持不变。
+     *
+     * 阈值化的API及其参数解释：
+     * threshold(Mat src,Mat dst,double thresh,double maxval,int typ)
+     * src:输入图像
+     * dst:输出图像
+     * thresh：阈值T
+     * maxval：最大灰度值一般为255
+     * type：阈值化方法必须是上述五种方法之一，最常见的是阈值二值化
+     *
+     * 五种阈值化方法在OpenCV中枚举类型定义如下：
+     * THRESH_BINARY = 0：阈值二值化
+     * THRESH_BINARY_INV = 1：反阈值二值化
+     * THRESH_TRUNC = 2：阈值截断。
+     * THRESH_TOZERO = 3：阈值取零
+     * THRESH_TOZERO_INV = 4：反阈值取零
+     *
+     *
+     */
+    /**
+     * 阈值二值化
+     */
+    private void toThresholdBinnary(int option){
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.girl5);
+        Mat target = new Mat();
+        Utils.bitmapToMat(bitmap, target);
+        Mat dst = new Mat();
+        //这行代码必须要加上，Bitmap默认的颜色通道时RGBA，需要转换为OpenCv可以识别的BGR。不然就会报通道数异常
+        Imgproc.cvtColor(target, dst, Imgproc.COLOR_RGBA2BGR);
+        Mat dst2 = new Mat();
+        Imgproc.cvtColor(dst,dst2,Imgproc.COLOR_BGR2GRAY);
+        Mat dst3 = new Mat();
+
+
+        switch (option) {
+            case 0://阈值二值化
+                Imgproc.threshold(dst2,dst3,80,255,Imgproc.THRESH_BINARY);
+                break;
+            case 1://反阈值二值化
+                Imgproc.threshold(dst2,dst3,150,255,Imgproc.THRESH_BINARY_INV);
+                break;
+            case 2://阈值截断
+                Imgproc.threshold(dst2,dst3,150,255,Imgproc.THRESH_TRUNC);
+                break;
+            case 3://阈值取零
+                Imgproc.threshold(dst2,dst3,150,255,Imgproc.THRESH_TOZERO);
+                break;
+            case 4://反阈值取零
+                Imgproc.threshold(dst2,dst3,150,255,Imgproc.THRESH_TOZERO_INV);
+                break;
+        }
+
+        Utils.matToBitmap(dst3, bitmap);
+        ivImage.setImageBitmap(bitmap);
+        target.release();
+        dst.release();
+        dst2.release();
+        dst3.release();
+    }
+
+    /**
+     * OpenCV支持的两种全局自动计算阈值方法分别为OTSU与Triangle，这两种方法都是以图像直方图统计数据为基础来自动计算阈值的。
+     * 此外，OpenCV还有两种自适应阈值分割方法，它们是基于局部图像自动计算阈值的方法
+     *
+     * OTSU:假设阈值为T，将直方图数据分割为两个部分，计算它们的类内方差与类间方差，最终最小类内方差或者最大类间方差对应的灰度值就是要计算得到的阈值T
+     *
+     * Triangle:三角阈值法是对得到的直方图数据寻找最大峰值，从最大峰值得到垂直45°方向的三角形，计算最大斜边到直方图的距离d，对应的直方图灰度值即为图像阈值T
+     *
+     * 自适应阈值:自适应阈值计算方法有C均值与高斯C均值两种ADAPTIVE_THRESH_MEAN_C、ADAPTIVE_THRESH_GAUSSIAN_C
+     * 相关API解释如下：
+     * adaptiveThreshold(Mat src, Mat dst,double maxValue,int adaptiveMethod,int thresholdType,int blockSize,double c)
+     * src:输入图像
+     * dst：输出图像
+     * maxValue：最大灰度值，通常为255
+     * adaptiveMethod:自适应方法，C均值或高斯C均值
+     * thresholdType:阈值化方法，五种阈值化分割之一，常见的阈值化方法为：THRESH_Binary
+     * blockSize：分块大小，必须为奇数
+     * C:常量数值，阈值化的时候使用计算得到阈值+C之后做阈值化分割
+     *
+     */
+    private void toAdaptiveThreshold(int type){
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.girl5);
+        Mat target = new Mat();
+        Utils.bitmapToMat(bitmap, target);
+        Mat dst = new Mat();
+        //这行代码必须要加上，Bitmap默认的颜色通道时RGBA，需要转换为OpenCv可以识别的BGR。不然就会报通道数异常
+        Imgproc.cvtColor(target, dst, Imgproc.COLOR_RGBA2BGR);
+        Mat dst2 = new Mat();
+        Imgproc.cvtColor(dst,dst2,Imgproc.COLOR_BGR2GRAY);
+        Mat dst3 = new Mat();
+
+
+        switch (type) {
+            case 0://自动阈值二值化
+                Imgproc.adaptiveThreshold(dst2,dst3,255,Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C,Imgproc.THRESH_BINARY,15,0);
+                break;
+            case 1://自动反阈值二值化
+                Imgproc.adaptiveThreshold(dst2,dst3,255,Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C,Imgproc.THRESH_BINARY_INV,15,0);
+                break;
+            case 2://自动阈值截断
+                Imgproc.adaptiveThreshold(dst2,dst3,255,Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C,Imgproc.THRESH_TRUNC,15,0);
+                break;
+            case 3://自动阈值取零
+                Imgproc.adaptiveThreshold(dst2,dst3,255,Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C,Imgproc.THRESH_TOZERO,15,0);
+                break;
+            case 4://自动反阈值取零
+                Imgproc.adaptiveThreshold(dst2,dst3,255,Imgproc.ADAPTIVE_THRESH_GAUSSIAN_C,Imgproc.THRESH_TOZERO_INV,15,0);
+                break;
+        }
+
+        Utils.matToBitmap(dst3, bitmap);
+        ivImage.setImageBitmap(bitmap);
+        target.release();
+        dst.release();
+        dst2.release();
+        dst3.release();
     }
 
 }
