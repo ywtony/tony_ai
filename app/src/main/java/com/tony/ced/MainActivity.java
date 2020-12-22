@@ -16,6 +16,7 @@ import com.tony.ced.adapter.listener.OnListItemClickListener;
 import com.tony.ced.bean.MainItem;
 import com.tony.ced.ui.BaseFeaturesTestingActivity;
 import com.tony.ced.ui.BitmapOptionActivity;
+import com.tony.ced.ui.FeatureTestingMatchingActivity;
 import com.tony.ced.ui.GrayImageActivity;
 import com.tony.ced.ui.ImageOptionActivity;
 import com.tony.ced.ui.MapAndBitmapActivity;
@@ -62,19 +63,12 @@ import java.util.List;
 
 /**
  * 基本概念：亮度、对比度、饱和度、锐化、分辨率
- *
+ * <p>
  * 亮度：一般指图像的明暗程度，对于数字图像，如果灰度值再[0~255]之间，则约接近0亮度越低，约接近255则亮度越高。
  * 对比度：指的是最高与最低灰度级之间的灰度差。
  * 饱和度：指的是图像中颜色种类的多少，其对具有鲜艳颜色、颜色丰富的图像影响很大。
  * 锐化：图像锐化是指补偿图像轮廓，增强图像边缘及灰度跳变部分，使图像变得清晰。
  * 分辨率：图像分辨率指图像中存储的信息量，是每英寸图像内有多少个像素点。
- *
- *
- *
- *
- *
- *
- *
  */
 public class MainActivity extends BaseActivity {
     private RecyclerView recyclerView;
@@ -112,6 +106,8 @@ public class MainActivity extends BaseActivity {
         datas.add(new MainItem("操作Mat像素", MatPixelOptionActivity.class.getName()));
         datas.add(new MainItem("操作Mat像素", ImageOptionActivity.class.getName()));
         datas.add(new MainItem("图像基本特征检测", BaseFeaturesTestingActivity.class.getName()));
+        datas.add(new MainItem("图像特征检测与匹配", FeatureTestingMatchingActivity.class.getName()));
+
     }
 
     /**

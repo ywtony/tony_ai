@@ -36,6 +36,9 @@
         <activity android:name=".ui.ImageOptionActivity" />
         <!--        图像基本特征检测-->
         <activity android:name=".ui.BaseFeaturesTestingActivity" />
+        <!--图像特征检测与匹配-->
+        <activity android:name=".ui.FeatureTestingMatchingActivity" />
+
 
         <!--        //图片选择Activity-->
         <activity
