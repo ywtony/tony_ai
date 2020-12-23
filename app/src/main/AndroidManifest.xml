@@ -38,6 +38,8 @@
         <activity android:name=".ui.BaseFeaturesTestingActivity" />
         <!--图像特征检测与匹配-->
         <activity android:name=".ui.FeatureTestingMatchingActivity" />
+        <!-- 相机的使用-->
+        <activity android:name=".ui.CameraTestingActivity" />
 
 
         <!--        //图片选择Activity-->
