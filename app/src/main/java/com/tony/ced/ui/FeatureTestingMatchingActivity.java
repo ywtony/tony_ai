@@ -1,5 +1,6 @@
 package com.tony.ced.ui;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -16,10 +17,18 @@ import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
+import org.opencv.core.MatOfRect;
 import org.opencv.core.Point;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.objdetect.CascadeClassifier;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,6 +71,7 @@ public class FeatureTestingMatchingActivity extends BaseActivity {
         List<String> datas = new ArrayList<>();
         datas.add("角点检测并绘制角点");
         datas.add("角点加检测与绘制2");
+        datas.add("测试一下人脸检测");
         show(datas);
     }
 
@@ -74,6 +84,9 @@ public class FeatureTestingMatchingActivity extends BaseActivity {
                 break;
             case 1://焦点检测与绘制2
                 toShiTomasi();
+                break;
+            case 2://测试一下人脸检测
+                toFaceMatching();
                 break;
 
 
@@ -182,6 +195,77 @@ public class FeatureTestingMatchingActivity extends BaseActivity {
         dst.release();
     }
 
+    /**
+     * ps:只有正面照才能被检测出来，其他的都是检测不出来的。
+     *
+     * OpenCV中的人脸检测，其是基于训练好的LBP与HAAR特征级联检测器完成的。
+     * 相关调用API如下所示：
+     * detectMultiScale(Mat src,MatOfRect objects,double scaleFactor,int minNeighbors,int flags,Size minSize,Size maxSize)
+     * src:输入图像
+     * objects:表示检测到的对象个数，返回每个对象的矩形Box坐标
+     * scaleFactor:尺度变换比率，基本在1.05~1.2之间比较好
+     * minNeighbors:领域范围内符合条件的对象个数，它是输出检测最终BOX的重要阈值，太大，则条件比较苛刻，容易丢失检测对象，太小，则容易导致错误检测
+     * flags:OpenCV 2.x版本使用的参数，这里不需要，设置为0即可。
+     * minSize：对象检测的最小范围。
+     * maxSize：对象检测的最大范围。
+     */
+    private void toFaceMatching() {
+        try {
+            initFaceDetector();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.face);
+        //将Bitmap转换为mat
+        Mat target = new Mat();
+        Utils.bitmapToMat(bitmap, target);
+        Mat src = new Mat();
+        Imgproc.cvtColor(target, src, Imgproc.COLOR_RGBA2BGR);
+        //转换成灰度图像
+        Mat gray = new Mat();
+        Imgproc.cvtColor(src, gray, Imgproc.COLOR_BGR2GRAY);
+        Mat dst = new Mat();
+        MatOfRect faces = new MatOfRect();
+        //人脸检测
+        faceDetector.detectMultiScale(gray, faces, 1.1, 3, 0, new Size(50, 50), new Size(src.width(),src.height()));
+        //绘制Box
+        List<Rect> faceList = faces.toList();
+        src.copyTo(dst);
+        if (faceList != null && faceList.size() > 0) {
+            for (Rect rect : faceList) {
+                Imgproc.rectangle(dst, rect.tl(), rect.br(), new Scalar(255, 0, 0), 2, 8, 0);
+            }
+        }
 
+
+        //将Mat转换为Bitmap
+        Bitmap bm = Bitmap.createBitmap(dst.width(), dst.height(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(dst, bm);
+        ivImage.setImageBitmap(bm);
+        target.release();
+        src.release();
+        gray.release();
+        dst.release();
+
+    }
+
+    private CascadeClassifier faceDetector = null;
+
+    private void initFaceDetector() throws IOException {
+        InputStream input = getResources().openRawResource(R.raw.lbpcascade_frontalface);
+        File cascadeDir = this.getDir("cascade", Context.MODE_PRIVATE);
+        File file = new File(cascadeDir.getAbsoluteFile(), "lbpcascade_frontalface.xml");
+        FileOutputStream output = new FileOutputStream(file);
+        byte[] buff = new byte[1024];
+        int len = 0;
+        while ((len = input.read(buff)) != -1) {
+            output.write(buff, 0, len);
+        }
+        input.close();
+        output.close();
+        faceDetector = new CascadeClassifier(file.getAbsolutePath());
+        file.delete();
+        cascadeDir.delete();
+    }
 
 }
