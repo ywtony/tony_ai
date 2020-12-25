@@ -18,11 +18,26 @@
         app:layout_constraintLeft_toRightOf="@+id/btnStart"
         android:text="后置设摄像头"
         />
+    <Button
+        android:id="@+id/btnPicture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginBottom="30dp"
+        android:text="拍照"
+        />
+    <Button
+        android:id="@+id/btnSelectFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="选择滤镜"
+        app:layout_constraintLeft_toRightOf="@+id/btnEnd" />
     <org.opencv.android.JavaCameraView
         android:id="@+id/cameraView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
