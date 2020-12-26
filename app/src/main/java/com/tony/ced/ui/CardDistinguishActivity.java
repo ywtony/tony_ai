@@ -201,19 +201,12 @@ public class CardDistinguishActivity extends BaseActivity {
             Log.e("BoundRect ", "rate:" + rate);
             if (w / h > 5) {
 //                Imgproc.drawContours(dst, contours, i, new Scalar(255, 0, 0), 2);
-                dst = new Mat(dst,rect);
+                //找到并截取身份证区域
+                dst = new Mat(dst, rect);
             }
 
         }
         return dst;
     }
 
-    /**
-     * @description 获取身份证号码识别区域
-     * @date: 2020/12/26 15:08
-     * @author: wei.yang
-     */
-    private void getCardNumber() {
-//        Imgproc.minAreaRect()
-    }
 }

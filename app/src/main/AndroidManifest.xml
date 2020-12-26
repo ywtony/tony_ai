@@ -41,7 +41,9 @@
         <!-- 相机的使用-->
         <activity android:name=".ui.CameraTestingActivity" />
         <!--        身份证识别-->
-        <activity android:name=".ui.CardDistinguishActivity"/>
+        <activity android:name=".ui.CardDistinguishActivity" />
+        <!--卡通画滤镜-->
+        <activity android:name=".ui.TheCartoonFilterActivity" />
 
         <!--        //图片选择Activity-->
         <activity

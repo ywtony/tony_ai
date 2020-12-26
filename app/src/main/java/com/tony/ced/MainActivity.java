@@ -24,6 +24,7 @@ import com.tony.ced.ui.ImageOptionActivity;
 import com.tony.ced.ui.MapAndBitmapActivity;
 import com.tony.ced.ui.MatOptionActivity;
 import com.tony.ced.ui.MatPixelOptionActivity;
+import com.tony.ced.ui.TheCartoonFilterActivity;
 import com.tony.ced.utils.ActivityUtils;
 import com.tony.ced.utils.ToastUtil;
 import com.tony.ced.weight.ScrollSpeedLinearLayoutManger;
@@ -111,6 +112,7 @@ public class MainActivity extends BaseActivity {
         datas.add(new MainItem("图像特征检测与匹配", FeatureTestingMatchingActivity.class.getName()));
         datas.add(new MainItem("相机的使用", CameraTestingActivity.class.getName()));
         datas.add(new MainItem("身份证识别步骤分解", CardDistinguishActivity.class.getName()));
+        datas.add(new MainItem("卡通画滤镜", TheCartoonFilterActivity.class.getName()));
     }
 
     /**
