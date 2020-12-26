@@ -17,6 +17,7 @@ import com.tony.ced.bean.MainItem;
 import com.tony.ced.ui.BaseFeaturesTestingActivity;
 import com.tony.ced.ui.BitmapOptionActivity;
 import com.tony.ced.ui.CameraTestingActivity;
+import com.tony.ced.ui.CardDistinguishActivity;
 import com.tony.ced.ui.FeatureTestingMatchingActivity;
 import com.tony.ced.ui.GrayImageActivity;
 import com.tony.ced.ui.ImageOptionActivity;
@@ -109,7 +110,7 @@ public class MainActivity extends BaseActivity {
         datas.add(new MainItem("图像基本特征检测", BaseFeaturesTestingActivity.class.getName()));
         datas.add(new MainItem("图像特征检测与匹配", FeatureTestingMatchingActivity.class.getName()));
         datas.add(new MainItem("相机的使用", CameraTestingActivity.class.getName()));
-
+        datas.add(new MainItem("身份证识别步骤分解", CardDistinguishActivity.class.getName()));
     }
 
     /**

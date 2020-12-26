@@ -40,7 +40,8 @@
         <activity android:name=".ui.FeatureTestingMatchingActivity" />
         <!-- 相机的使用-->
         <activity android:name=".ui.CameraTestingActivity" />
-
+        <!--        身份证识别-->
+        <activity android:name=".ui.CardDistinguishActivity"/>
 
         <!--        //图片选择Activity-->
         <activity
