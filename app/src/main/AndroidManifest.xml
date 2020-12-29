@@ -44,6 +44,9 @@
         <activity android:name=".ui.CardDistinguishActivity" />
         <!--卡通画滤镜-->
         <activity android:name=".ui.TheCartoonFilterActivity" />
+        <!--人脸美颜-->
+        <activity android:name=".ui.FaceBeautyActivity" />
+
 
         <!--        //图片选择Activity-->
         <activity
