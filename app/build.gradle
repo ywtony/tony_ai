@@ -24,6 +24,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    externalNativeBuild {    //添加：指定cmake文件的路径：和build.gradle同路径
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
 }
 
 dependencies {

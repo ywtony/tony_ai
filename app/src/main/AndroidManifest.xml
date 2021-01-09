@@ -46,6 +46,8 @@
         <activity android:name=".ui.TheCartoonFilterActivity" />
         <!--人脸美颜-->
         <activity android:name=".ui.FaceBeautyActivity" />
+        <!--        人脸面具覆盖-->
+        <activity android:name=".ui.MaskCoveringActivity" />
 
 
         <!--        //图片选择Activity-->
