@@ -46,9 +46,11 @@ public class MaskCoveringActivity extends BaseActivity {
     ImageView ivImage;
     @BindView(R.id.tvOpenCvVersion)
     TextView tvVersion;
+
     static {
         System.loadLibrary("native-lib");
     }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,12 +64,13 @@ public class MaskCoveringActivity extends BaseActivity {
             selectMenu();
         });
         String version = NativeUtils.getInstance().getOpenCVVersion();
-        tvVersion.setText("OpenCV的版本号："+version);
+        tvVersion.setText("OpenCV的版本号：" + version);
     }
 
     private void selectMenu() {
         List<String> datas = new ArrayList<>();
         datas.add("面具覆盖");
+        datas.add("像素取反");
         show(datas);
     }
 
@@ -77,7 +80,10 @@ public class MaskCoveringActivity extends BaseActivity {
         switch (position) {
             case 0://卡通画滤镜
 //                showImage(getMaskCovering());
-                showGray();
+                showBlur();
+                break;
+            case 1://像素取反
+                showNegation();
                 break;
         }
     }
@@ -127,10 +133,17 @@ public class MaskCoveringActivity extends BaseActivity {
         return dst;
     }
 
-    private void showGray(){
+    private void showBlur() {
         Bitmap inputBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.lena);
-        Bitmap outputBitmap = Bitmap.createBitmap(inputBitmap.getWidth(),inputBitmap.getWidth(), Bitmap.Config.ARGB_8888);
-        NativeUtils.getInstance().getComicImage(inputBitmap,outputBitmap);
+        Bitmap outputBitmap = Bitmap.createBitmap(inputBitmap.getWidth(), inputBitmap.getWidth(), Bitmap.Config.ARGB_8888);
+        NativeUtils.getInstance().getComicImage(inputBitmap, outputBitmap);
+        ivImage.setImageBitmap(outputBitmap);
+    }
+
+    private void showNegation(){
+        Bitmap inputBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.lena);
+        Bitmap outputBitmap = Bitmap.createBitmap(inputBitmap.getWidth(), inputBitmap.getWidth(), Bitmap.Config.ARGB_8888);
+        NativeUtils.getInstance().pixelNegation(inputBitmap,outputBitmap);
         ivImage.setImageBitmap(outputBitmap);
     }
 

@@ -24,7 +24,8 @@ add_library( # Sets the name of the library.
 
         # Provides a relative path to your source file(s).
         src/main/cpp/native-lib.cpp
-        #src/main/cpp/source/Utils.cpp
+        src/main/cpp/tony/tonyutil.hpp
+        src/main/cpp/tony/tonyutil.cpp
         )
 
 # Searches for a specified prebuilt library and stores the path as a
